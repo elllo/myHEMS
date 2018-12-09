@@ -4,7 +4,7 @@
  
 const char* SSID = "***";
 const char* PSK = "***";
-const char* MQTT_BROKER = "***";
+const char* MQTT_BROKER = "192.168.178.64";
 
 #define DHTPIN D4 //DHT-Pin
 #define DHTTYPE DHT22 //DHT 22 (AM2302)
@@ -13,23 +13,24 @@ const char* MQTT_BROKER = "***";
 WiFiClient espClient;
 PubSubClient client(espClient);
 DHT dht(DHTPIN, DHTTYPE);
-long lastMsg = 0;
-char msg[50];
-char msgT[50];
-int value = 0;
+//long lastMsg = 0;
+//char msg[50];
+char* msgT;
+char* msgH;
+//int value = 0;
 
-void sendSensor(){
-  float h = dht.readHumidity();
-  float t = dht.readTemperature(); // or dht.readTemperature(true) for Fahrenheit
-  if (isnan(h) || isnan(t)) {
-    Serial.println("Failed to read from DHT sensor!");
-    return;
-  }
-
-  Serial.println(h);
-  Serial.println(t);
-
-}
+//void sendSensor(){
+//  float h = dht.readHumidity();
+//  float t = dht.readTemperature(); // or dht.readTemperature(true) for Fahrenheit
+//  if (isnan(h) || isnan(t)) {
+//    Serial.println("Failed to read from DHT sensor!");
+//    return;
+//  }
+//
+//  Serial.println(h);
+//  Serial.println(t);
+//
+//}
 
 
 void setup() {
@@ -75,17 +76,22 @@ void loop() {
     }
     client.loop();
  
-    snprintf (msg, 50, "Alive since %ld milliseconds", millis());
-    Serial.print("Publish message: ");
-    Serial.println(msg);
-    client.publish("/home/data", msg);
+//    snprintf (msg, 50, "Alive since %ld milliseconds", millis());
+//    Serial.print("Publish message: ");
+//    Serial.println(msg);
+//    client.publish("/home/data", msg);
     
-    sendSensor();
+//    sendSensor();
+    float t = dht.readTemperature();   
+    float h = dht.readHumidity();
+//  snprintf (msgT, 50, "Temperature is at %.1f", tPub);
+//  Serial.println(msgT);
+    char bufferT[8];
+    msgT = dtostrf(t, 3, 1, bufferT);
+    char bufferH[8];
+    msgH = dtostrf(h, 3, 1, bufferH);
+    client.publish("/sensors/dht22/temperature", msgT);
+    client.publish("/sensors/dht22/humidity", msgH);
     
-    float tPub = dht.readTemperature();
-    snprintf (msgT, 50, "Temperature is at %.1f", tPub);
-    Serial.println(msgT);
-    client.publish("/home/data", msgT);
-    
-    delay(5000);
+    delay(8000);
 }
