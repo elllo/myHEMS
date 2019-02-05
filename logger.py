@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 
+import os
 import paho.mqtt.client as mqtt
 from influxdb import InfluxDBClient
+import credentials
 
 TOPIC = "/sensors/#"
 
 DB_SRV = {
     "host": "localhost",
-    "username": "max",
-    "password": "myHEMSJolt",
+    "username": credentials.username,
+    "password": credentials.password,
     "database": "myHEMS",
 }
 
@@ -34,6 +36,8 @@ def on_message(client, userdata, msg):
         ]
         if payload is not None:
             icli.write_points(payload)
+            if(float(msg.payload) < 16.0):
+                os.system('python3 /home/pi/myHEMSfiles/slackPlayground.py')        
 
 # what will be done with a humidity message
     if "dht22/humidity" in msg.topic:
@@ -47,18 +51,6 @@ def on_message(client, userdata, msg):
         if payload is not None:
             icli.write_points(payload)
     
-# what will be done with a temperature2 message
-    if "DS18B20" in msg.topic:
-        payload = [
-            {
-                "measurement": "temperature2",
-                "tags": {"id": "ds18b20_temp"},
-                "fields": {"value": float(msg.payload)},
-            }
-        ]
-        if payload is not None:
-            icli.write_points(payload)
-
 # what will be done with a temperature2 message
     if "DS18B20" in msg.topic:
         payload = [
