@@ -18,7 +18,7 @@ allowable_time_delta = 60  # 60 s equals 1 min
 
 # Set the webhook_url to the one provided by Slack when you create the webhook at https://my.slack.com/services/new/incoming-webhook/
 webhook_url = credentials.slack_webhook
-slack_data = {'text': "Hello, WATTx people and welcome to all guests! I am your myHEMS-Bot. I have noticed, that it is getting quite cold in here :wind_blowing_face::snowflake:. We do not want anyone to get sick. Would anyone mind closing the window please :pray:?"}
+slack_data = {'text': "Fenster zu! Es wird ganz schön kalt!"}
 
 
 def slack_send_message():

@@ -36,7 +36,7 @@ def on_message(client, userdata, msg):
         ]
         if payload is not None:
             icli.write_points(payload)
-            if(float(msg.payload) < 16.0):
+            if(float(msg.payload) < 16.5):
                 os.system('python3 /home/pi/myHEMSfiles/slackPlayground.py')        
 
 # what will be done with a humidity message
@@ -74,6 +74,9 @@ def on_message(client, userdata, msg):
         ]
         if payload is not None:
             icli.write_points(payload)
+            if(float(msg.payload) < 16.5):
+                os.system('python3 /home/pi/myHEMSfiles/slackPlayground.py')        
+
 
 # what will be done with a bme-1/bathroom-humid message
     if "bme280-1/humidity" in msg.topic:
