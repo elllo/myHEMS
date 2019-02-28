@@ -9,8 +9,8 @@ import credentials
 
 allowable_time_deviation = 3000
 
-starting_time_input = "2019-02-03 00:00:00"
-ending_time_input = "2019-02-03 07:45:00"
+starting_time_input = "2019-02-04 00:00:00"
+ending_time_input = "2019-02-04 07:45:00"
 
 room = "bath"
 
@@ -81,14 +81,14 @@ def main():
             continue
         else:
             time_delta = i[1] - previous_time
-            print("time delta is %.1f in [s]" % (time_delta/1000))
+            # print("time delta is %.1f in [s]" % (time_delta/1000))
             temp_delta_avg = (previous_delta + i[0]) / 2
             heat_increment = time_delta/1000 * temp_delta_avg
             heat_usage += heat_increment
-            print("Heat increment is %.1f, accumulated heat is %.0f" % (heat_increment, heat_usage))
+            # print("Heat increment is %.1f, accumulated heat is %.0f" % (heat_increment, heat_usage))
             previous_time = i[1]
     
-    print()
+    # print()
     print("The heat usage between \n%s and \n%s has been \n%i FHU ('fictitious heat units')" % (starting_time_input, ending_time_input, heat_usage))
 
 
